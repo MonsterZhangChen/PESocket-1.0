@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PESocket</name>
+    </assembly>
+    <members>
+        <member name="T:PENet.PESession`1">
+            <summary>
+            一个Session代表一种网络会话，它包含着需要进行回话的套接字，需要处理消息的类型以及进行通信的方法
+            </summary>
+            <typeparam name="T">网络回话需要处理的消息的类型</typeparam>
+        </member>
+        <member name="M:PENet.PESession`1.SendMsg(`0)">
+            <summary>
+            Send message data
+            </summary>
+        </member>
+        <member name="M:PENet.PESession`1.SendMsg(System.Byte[])">
+            <summary>
+            Send binary data
+            </summary>
+        </member>
+        <member name="M:PENet.PESession`1.Clear">
+            <summary>
+            Release Resource
+            </summary>
+        </member>
+        <member name="M:PENet.PESession`1.OnConnected">
+            <summary>
+            Connect network
+            </summary>
+        </member>
+        <member name="M:PENet.PESession`1.OnReciveMsg(`0)">
+            <summary>
+            Receive network message
+            </summary>
+        </member>
+        <member name="M:PENet.PESession`1.OnDisConnected">
+            <summary>
+            Disconnect network
+            </summary>
+        </member>
+        <member name="T:PENet.PESocket`2">
+            <summary>
+            网络传输的基本单位，它可以担任客户端或者服务端的角色，使用Stream消息类型，Tcp协议
+            </summary>
+            <typeparam name="T">网络会话的类型</typeparam>
+            <typeparam name="K">网络消息的类型</typeparam>
+        </member>
+        <member name="M:PENet.PESocket`2.StartAsServer(System.String,System.Int32)">
+            <summary>
+            Launch Server
+            </summary>
+        </member>
+        <member name="M:PENet.PESocket`2.StartAsClient(System.String,System.Int32)">
+            <summary>
+            Launch Client
+            </summary>
+        </member>
+        <member name="M:PENet.PESocket`2.SetLog(System.Boolean,System.Action{System.String,System.Int32})">
+            <summary>
+            Log
+            </summary>
+            <param name="log">log switch</param>
+            <param name="logCB">log function</param>
+        </member>
+        <member name="M:PENet.PETool.PackLenInfo(System.Byte[])">
+            <summary>
+            Add length info to package
+            </summary>
+        </member>
+        <member name="T:PENet.LogLevel">
+            <summary>
+            Log Level
+            </summary>
+        </member>
+    </members>
+</doc>
