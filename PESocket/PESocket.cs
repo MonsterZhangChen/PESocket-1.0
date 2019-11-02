@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace PENet {
     /// <summary>
     /// 网络传输的发起与接收单位，它可以担任客户端或者服务端的角色；
-    /// 它包含了传输套接字和网络回话
+    /// 它包含了传输所需的套接字和网络回话
     /// 使用IPV4地址族，Stream消息类型，Tcp协议
     /// </summary>
     /// <typeparam name="T">网络会话的类型</typeparam>
@@ -25,6 +25,9 @@ namespace PENet {
         private Socket skt = null;
         public T session = null;
         public int backlog = 10;
+        /// <summary>
+        /// 回话列表 当以服务器形式启动时会将每次异步连接时，建立的Settion加入到此列表中
+        /// </summary>
         List<T> sessionLst = new List<T>();
 
         public PESocket() {
@@ -34,7 +37,7 @@ namespace PENet {
         #region Server
         /// <summary>
         /// 以客户端的形式启动套接字
-        /// 1.进行绑定，Listen和异步Sccept()的常规操作
+        /// 1.进行终端绑定，Listen和异步Sccept()的常规操作
         /// 2.如果1成功,为Settion创建一个实例,并开始异步的接收数据;如果失败，Settion保持为空
         /// </summary>
         public void StartAsServer(string ip, int port) {
@@ -72,7 +75,6 @@ namespace PENet {
         /// 以客户端身份启动套接字：
         /// 1.发送一个异步的远程终端连接请求；
         /// 2.如果1成功，则将实例化Sesion对象，并开始异步的接收数据；如果连接失败，例如远程主机未开启，则Settion值会保持为null
-        /// 这个方法中包含了连接服务端的逻辑,如果连接失败，session值将保持空值
         /// </summary>
         public void StartAsClient(string ip, int port) {
             try {
@@ -103,7 +105,8 @@ namespace PENet {
         }
 
         /// <summary>
-        /// Log
+        /// 自定义控制台日志逻辑，目的是适配不同的运行环境；
+        /// 这段逻辑会保存到PETool当中，通过PETool.LogMsg()调用
         /// </summary>
         /// <param name="log">log switch</param>
         /// <param name="logCB">log function</param>

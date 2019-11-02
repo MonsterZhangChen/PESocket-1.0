@@ -22,7 +22,7 @@ namespace PENet {
 
         #region Recevie
         /// <summary>
-        /// 为Session对象指定套接字和closeCB，并开始异步接收数据
+        /// 为Session对象指定套接字和closeCB，并开始异步接收数据，并使用PEPkg来存储和解析
         /// </summary>
         /// <param name="skt"></param>
         /// <param name="closeCB"></param>
@@ -34,6 +34,7 @@ namespace PENet {
                 OnConnected();
 
                 PEPkg pack = new PEPkg();
+                //开始接收一个数据头
                 skt.BeginReceive(
                     pack.headBuff,
                     0,
@@ -47,13 +48,17 @@ namespace PENet {
             }
         }
 
-
+        /// <summary>
+        /// 异步接收数据头信息的回调,它按照把数据头存放在headBuff里，数据体存放在bodyBuff里循环进行
+        /// </summary>
+        /// <param name="ar"></param>
         private void RcvHeadData(IAsyncResult ar) {
             try {
                 PEPkg pack = (PEPkg)ar.AsyncState;
                 int len = skt.EndReceive(ar);
                 if (len > 0) {
                     pack.headIndex += len;
+                    //当数据头信息不完整时，异步接收数据表头剩余信息
                     if (pack.headIndex < pack.headLen) {
                         skt.BeginReceive(
                             pack.headBuff,
@@ -63,6 +68,7 @@ namespace PENet {
                             new AsyncCallback(RcvHeadData),
                             pack);
                     }
+                    //当数据头信息完整时，异步接收主体信息
                     else {
                         pack.InitBodyBuff();
                         skt.BeginReceive(pack.bodyBuff,
@@ -73,6 +79,7 @@ namespace PENet {
                             pack);
                     }
                 }
+                //当接收到0字节数据，说明与远程终端断联
                 else {
                     OnDisConnected();
                     Clear();
@@ -83,12 +90,17 @@ namespace PENet {
             }
         }
 
+        /// <summary>
+        /// 异步接收数据主体信息的回调,它按照把数据头存放在headBuff里，数据体存放在bodyBuff里循环进行
+        /// </summary>
+        /// <param name="ar"></param>
         private void RcvBodyData(IAsyncResult ar) {
             try {
                 PEPkg pack = (PEPkg)ar.AsyncState;
                 int len = skt.EndReceive(ar);
                 if (len > 0) {
                     pack.bodyIndex += len;
+                    //当数据主体信息不完整时,继续接受剩余的数据体信息
                     if (pack.bodyIndex < pack.bodyLen) {
                         skt.BeginReceive(pack.bodyBuff,
                             pack.bodyIndex,
@@ -97,10 +109,12 @@ namespace PENet {
                             new AsyncCallback(RcvBodyData),
                             pack);
                     }
+                    //当数据主体完整时，执行解析数据的逻辑,清空pkg的所有缓冲区内容，并重新接受数据头信息
                     else {
+                        //这里消息被完成的解析成对象
                         T msg = PETool.DeSerialize<T>(pack.bodyBuff);
+                        //对消息对象调用一段自定义逻辑
                         OnReciveMsg(msg);
-
                         //loop recive
                         pack.ResetData();
                         skt.BeginReceive(
@@ -118,15 +132,14 @@ namespace PENet {
                 }
             }
             catch (Exception e) {
-                PETool.LogMsg("RcvBodyError:" + e.Message, LogLevel.Error);
-
+                PETool.LogMsg("RcvBodyError:" + e.Message, LogLevel.Error);//这段日志一般在出现连接中断时打印
             }
         }
         #endregion
 
         #region Send
         /// <summary>
-        /// 将一个对象实例转换为一个带有字节长度信息的字节数组，并发送给远程主机
+        /// 将一个（PEMsg）对象实例转换为一个带有字节长度信息的字节数组，并发送给远程主机
         /// </summary>
         public void SendMsg(T msg) {
             byte[] data = PETool.PackLenInfo(PETool.Serialize<T>(msg));
@@ -178,21 +191,24 @@ namespace PENet {
         }
 
         /// <summary>
-        /// Connect network
+        /// 在PESocket建立了与远程主机的连接，并开始异步接收数据之前调用
+        /// 重写此类方法，一般用于设置日志窗口，在特殊的时间结点打印在控制台上
         /// </summary>
         protected virtual void OnConnected() {
             PETool.LogMsg("New Seesion Connected.", LogLevel.Info);
         }
 
         /// <summary>
-        /// Receive network message
+        /// 当接受到数据时调用；
+        /// 实际上，它是在异步接收到完整的一条数据体信息时开始调用
         /// </summary>
         protected virtual void OnReciveMsg(T msg) {
             PETool.LogMsg("Receive Network Message.", LogLevel.Info);
         }
 
         /// <summary>
-        /// Disconnect network
+        /// 当断开连接时调用；
+        /// 触发此方法调用的时机：远程主机断开连接,本机异步接收到一个空报包时调用
         /// </summary>
         protected virtual void OnDisConnected() {
             PETool.LogMsg("Session Disconnected.", LogLevel.Info);

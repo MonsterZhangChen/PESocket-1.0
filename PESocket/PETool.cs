@@ -44,6 +44,12 @@ namespace PENet {
             }
         }
 
+        /// <summary>
+        /// 将字节数组转换为消息的实例
+        /// </summary>
+        /// <typeparam name="T">消息的类型,它是PEMsg的子类</typeparam>
+        /// <param name="bs">消息的序列化字节流</param>
+        /// <returns></returns>
         public static T DeSerialize<T>(byte[] bs) where T : PEMsg {
             using (MemoryStream ms = new MemoryStream(bs)) {
                 BinaryFormatter bf = new BinaryFormatter();
@@ -55,6 +61,14 @@ namespace PENet {
         #region Log
         public static bool log = true;
         public static Action<string, int> logCB = null;
+
+        /// <summary>
+        /// 打印日志；它会先给消息加一个时间前缀
+        /// 如果委托成员logCB为空，调用控制台打印，否则调用logCB的逻辑；
+        /// logCB由聚合它的PESocket()的SetLog方法设置
+        /// </summary>
+        /// <param name="msg">日志信息的内容</param>
+        /// <param name="lv">日志信息的级别</param>
         public static void LogMsg(string msg, LogLevel lv = LogLevel.None) {
             if (log != true) {
                 return;

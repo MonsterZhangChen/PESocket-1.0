@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Protocol</name>
+    </assembly>
+    <members>
+        <member name="T:GameMsg">
+            <summary>
+            游戏消息数据的具体类，网络消息数据的单位；
+            它应该是客户端和服务端公用的类型
+            </summary>
+        </member>
+        <member name="T:ReqLogin">
+            <summary>
+            请求登录消息
+            </summary>
+        </member>
+        <member name="T:CMD">
+            <summary>
+            用于判断消息类型的枚举
+            </summary>
+        </member>
+        <member name="T:PECommon">
+            <summary>
+            服务端和客户端的公共工具类
+            </summary>
+        </member>
+        <member name="M:PECommon.Log(System.String,LogType)">
+            <summary>
+            打印操作统一添加逻辑(默认引用的是dll,所有不能去动源代码)；
+            它会的调用PETool.log()方法，给消息补上一个时间前缀
+            </summary>
+            <param name="msg"></param>
+            <param name="tp"></param>
+        </member>
+    </members>
+</doc>
