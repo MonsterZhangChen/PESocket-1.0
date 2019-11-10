@@ -3,15 +3,22 @@ using PENet;
 
 /// <summary>
 /// 游戏消息数据的具体类，网络消息数据的单位；
-/// 它应该是客户端和服务端公用的类型
+/// 它应该是客户端和服务端通用的类型
 /// </summary>
 [Serializable]
 public class GameMsg : PEMsg
 {
     public ReqLogin reqLogin;
     public RspLogin rspLogin;
+
+    public ReqRename reqRename;
+    public RspRename rspRename;
+
+    public ReqGuide reqGuide;
+    public RspGuide rspGuide;
 }
 
+#region 登录相关数据
 /// <summary>
 /// 请求登录数据
 /// </summary>
@@ -44,8 +51,92 @@ public class PlayerData
     public int power;
     public int coin;
     public int diamond;
+    public int hp;
+    public int ad;
+    public int ap;
+    public int addef;
+    public int apdef;
+    /// <summary>
+    /// //闪避概率
+    /// </summary>
+    public int dodge;
+    /// <summary>
+    /// 穿透比率
+    /// </summary>
+    public int pierce;
+    /// <summary>
+    /// 暴击概率
+    /// </summary>
+    public int critical;
+    /// <summary>
+    /// 任务引导id
+    /// </summary>
+    public int guideid;
 }
 
+/// <summary>
+/// 请求重命名数据
+/// </summary>
+[Serializable]
+public class ReqRename
+{
+    public string name;
+}
+
+/// <summary>
+/// 回应重命名数据
+/// </summary>
+[Serializable]
+public class RspRename
+{
+    public string name;
+}
+#endregion
+
+#region 引导任务相互
+/// <summary>
+/// 任务完成请求数据
+/// </summary>
+[Serializable]
+public class ReqGuide
+{
+    /// <summary>
+    /// 本次已完成任务的id
+    /// </summary>
+    public int guideid;
+}
+
+/// <summary>
+/// 任务完成响应数据
+/// </summary>
+[Serializable]
+public class RspGuide
+{
+    /// <summary>
+    /// 下一个要进行的任务
+    /// </summary>
+    public int guideid;
+    /// <summary>
+    /// 完成任务后的总金币数
+    /// </summary>
+    public int coin;
+    /// <summary>
+    /// 完成任务后的经验值
+    /// </summary>
+    public int exp;
+    /// <summary>
+    /// 完成任务后的等级
+    /// </summary>
+    public int lv;
+}
+
+#endregion
+
+
+/// <summary>
+/// 用于判断消息错误类型的枚举,该枚举直接赋值给PEMsg的err
+/// 如果消息的错误类型不为None，则不再将消息分发到业务逻辑处理，而是直接在UI上显示错误内容
+/// </summary>
 public enum ErrorCode
 {
     /// <summary>
@@ -60,22 +151,60 @@ public enum ErrorCode
     /// 密码错误
     /// </summary>
     ErrorPass,
+    /// <summary>
+    /// 名称已存在错误
+    /// </summary>
+    NameIsExit,
+    /// <summary>
+    /// 更新数据库错误
+    /// </summary>
+    UpdateDbError,
+    /// <summary>
+    /// 服务器数据异常
+    /// </summary>
+    ServerDataError
 }
 
 
 /// <summary>
-/// 用于判断消息类型的枚举,该枚举直接赋值给
+/// 命令号：用于判断消息类型的枚举,该枚举直接赋值给PEMsg的cmd字段
 /// </summary>
 public enum CMD
 {
     None=0,
     //登录相关 100
+    /// <summary>
+    /// 登录请求消息类型
+    /// </summary>
     ReqLogin=101,
+    /// <summary>
+    /// 登录响应消息类型
+    /// </summary>
     RspLogin=102,
+    /// <summary>
+    /// 重命名请求消息类型
+    /// </summary>
+    ReqRename=103,
+    /// <summary>
+    /// 重命名响应消息类型
+    /// </summary>
+    RsqRename=104,
+    //任务引导相关
+    /// <summary>
+    /// 完成任务请求数据类型
+    /// </summary>
+    ReqGuide=200,
+    /// <summary>
+    /// 完成任务响应数据类型
+    /// </summary>
+    RspGuide=201,
 }
 
+/// <summary>
+/// 服务器配置
+/// </summary>
 public class SrvCfg
 {
-    public const string sevAddress = "127.0.0.1";
+    public const string sevAddress = "10.0.117.84";
     public const int sevPort = 17666;
 }

@@ -5,11 +5,6 @@
 	日期：2019/11/01 14:20   	
 	功能：服务器初始化
 *****************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 public class ServerRoot
 {
@@ -27,10 +22,13 @@ public class ServerRoot
     {
         //todo 数据层
         //服务层
-        CacheSvc.Instance.Init();
         NetSvc.Instance.Init();
+        DBMgr.Instance.Init();
+        CacheSvc.Instance.Init();
         //业务层
+        CfgSvc.Instance.Init();
         LoginSys.Instance.Init();
+        GuideSys.Instance.Init();
     }
 
     /// <summary>
@@ -39,5 +37,18 @@ public class ServerRoot
     public void Update()
     {
         NetSvc.Instance.Update();
+    }
+
+    /// <summary>
+    /// 网络会话id生成种子
+    /// </summary>
+    private int sessionId = 0;
+    public int GetSettionID()
+    {
+        if (sessionId == int.MaxValue)
+        {
+            sessionId=0;
+        }
+        return sessionId++;
     }
 }

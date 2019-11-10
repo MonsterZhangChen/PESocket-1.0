@@ -12,6 +12,9 @@ using System.Collections.Generic;
 
 /// <summary>
 /// 数据包 它包含数据和要处理它的Session
+/// 这里需要传递Settion的原因：服务器端与客户端是一对多的关系，而这里将消息统一分发到单线程处理；
+/// 必须获得对应的Settion才能发送与之对应的回应；如果直接在多线程处理，实际是不需要的；
+/// 但多线程有线程争用资源问题，需要锁定对应的资源，也是逻辑的一种消耗
 /// </summary>
 public class MsgPack
 {
@@ -57,7 +60,7 @@ public class NetSvc
     /// 但是回想这种方式仍然不安全，因为业务逻辑可能与其他类仍然耦合，所以单线程仍然是保险的方式
     /// </summary>
     /// <param name="msg"></param>
-    public void AddMsgQue(MsgPack pack)
+    public void AddPackQue(MsgPack pack)
     {
         lock(obj)
         {
@@ -72,7 +75,7 @@ public class NetSvc
     {
         if (msgPacQue.Count > 0)
         {
-            PETool.LogMsg("msgCount:" + msgPacQue.Count);
+            //PETool.LogMsg("msgCount:" + msgPacQue.Count);
             MsgPack pack;
             lock (obj)
             {
@@ -91,11 +94,15 @@ public class NetSvc
         switch ((CMD)pack.msg.cmd)
         {
             case CMD.None:
-                LoginSys.Instance.ReqLogin(pack);
                 break;
             case CMD.ReqLogin:
+                LoginSys.Instance.ReqLogin(pack);
                 break;
-            case CMD.RspLogin:
+            case CMD.ReqRename:
+                LoginSys.Instance.ReqRename(pack);
+                break;
+            case CMD.ReqGuide:
+                GuideSys.Instance.ReqGuide(pack);
                 break;
             default:
                 break;

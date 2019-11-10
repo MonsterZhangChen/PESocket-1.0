@@ -14,6 +14,11 @@
             表示消息的类型，它是解析消息方式的依据，它需要在消息实例化时指定
             </summary>
         </member>
+        <member name="F:PENet.PEMsg.err">
+            <summary>
+            表示消息的错误码
+            </summary>
+        </member>
         <member name="T:PENet.PEPkg">
             <summary>
             用于存储和解析接收到的字节数组

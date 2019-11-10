@@ -7,17 +7,163 @@
         <member name="T:GameMsg">
             <summary>
             游戏消息数据的具体类，网络消息数据的单位；
-            它应该是客户端和服务端公用的类型
+            它应该是客户端和服务端通用的类型
             </summary>
         </member>
         <member name="T:ReqLogin">
             <summary>
-            请求登录消息
+            请求登录数据
+            </summary>
+        </member>
+        <member name="T:RspLogin">
+            <summary>
+            登录响应数据
+            </summary>
+        </member>
+        <member name="T:PlayerData">
+            <summary>
+            玩家数据
+            </summary>
+        </member>
+        <member name="F:PlayerData.dodge">
+            <summary>
+            //闪避概率
+            </summary>
+        </member>
+        <member name="F:PlayerData.pierce">
+            <summary>
+            穿透比率
+            </summary>
+        </member>
+        <member name="F:PlayerData.critical">
+            <summary>
+            暴击概率
+            </summary>
+        </member>
+        <member name="F:PlayerData.guideid">
+            <summary>
+            任务引导id
+            </summary>
+        </member>
+        <member name="T:ReqRename">
+            <summary>
+            请求重命名数据
+            </summary>
+        </member>
+        <member name="T:RspRename">
+            <summary>
+            回应重命名数据
+            </summary>
+        </member>
+        <member name="T:ReqGuide">
+            <summary>
+            任务完成请求数据
+            </summary>
+        </member>
+        <member name="F:ReqGuide.guideid">
+            <summary>
+            本次已完成任务的id
+            </summary>
+        </member>
+        <member name="T:RspGuide">
+            <summary>
+            任务完成响应数据
+            </summary>
+        </member>
+        <member name="F:RspGuide.guideid">
+            <summary>
+            下一个要进行的任务
+            </summary>
+        </member>
+        <member name="F:RspGuide.coin">
+            <summary>
+            完成任务后的总金币数
+            </summary>
+        </member>
+        <member name="F:RspGuide.exp">
+            <summary>
+            完成任务后的经验值
+            </summary>
+        </member>
+        <member name="F:RspGuide.lv">
+            <summary>
+            完成任务后的等级
+            </summary>
+        </member>
+        <member name="T:ErrorCode">
+            <summary>
+            用于判断消息错误类型的枚举,该枚举直接赋值给PEMsg的err
+            如果消息的错误类型不为None，则不再将消息分发到业务逻辑处理，而是直接在UI上显示错误内容
+            </summary>
+        </member>
+        <member name="F:ErrorCode.None">
+            <summary>
+            没有错误
+            </summary>
+        </member>
+        <member name="F:ErrorCode.AcctIsOnline">
+            <summary>
+            账号已上线
+            </summary>
+        </member>
+        <member name="F:ErrorCode.ErrorPass">
+            <summary>
+            密码错误
+            </summary>
+        </member>
+        <member name="F:ErrorCode.NameIsExit">
+            <summary>
+            名称已存在错误
+            </summary>
+        </member>
+        <member name="F:ErrorCode.UpdateDbError">
+            <summary>
+            更新数据库错误
+            </summary>
+        </member>
+        <member name="F:ErrorCode.ServerDataError">
+            <summary>
+            服务器数据异常
             </summary>
         </member>
         <member name="T:CMD">
             <summary>
-            用于判断消息类型的枚举
+            命令号：用于判断消息类型的枚举,该枚举直接赋值给PEMsg的cmd字段
+            </summary>
+        </member>
+        <member name="F:CMD.ReqLogin">
+            <summary>
+            登录请求消息类型
+            </summary>
+        </member>
+        <member name="F:CMD.RspLogin">
+            <summary>
+            登录响应消息类型
+            </summary>
+        </member>
+        <member name="F:CMD.ReqRename">
+            <summary>
+            重命名请求消息类型
+            </summary>
+        </member>
+        <member name="F:CMD.RsqRename">
+            <summary>
+            重命名响应消息类型
+            </summary>
+        </member>
+        <member name="F:CMD.ReqGuide">
+            <summary>
+            完成任务请求数据类型
+            </summary>
+        </member>
+        <member name="F:CMD.RspGuide">
+            <summary>
+            完成任务响应数据类型
+            </summary>
+        </member>
+        <member name="T:SrvCfg">
+            <summary>
+            服务器配置
             </summary>
         </member>
         <member name="T:PECommon">
@@ -32,6 +178,28 @@
             </summary>
             <param name="msg"></param>
             <param name="tp"></param>
+        </member>
+        <member name="M:PECommon.GetFightByProps(PlayerData)">
+            <summary>
+            计算玩家的战斗力(策划提供公式)；
+            数值运算写在PECommon里的原因:客户端需要拿他作为显示的数据，服务端需要拿这些数据做计算和存储；
+            </summary>
+            <param name="pd">玩家数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:PECommon.GetPowerLimit(PlayerData)">
+            <summary>
+            获得玩家的体力上限(策划提供公式)
+            </summary>
+            <param name="pd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PECommon.GetExpValByLv(System.Int32)">
+            <summary>
+            通过等级，获取升级所需的经验值
+            </summary>
+            <param name="lv">等级</param>
+            <returns></returns>
         </member>
     </members>
 </doc>

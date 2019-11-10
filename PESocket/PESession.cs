@@ -7,6 +7,7 @@
 *****************************************************/
 
 using System;
+using System.Net;
 using System.Net.Sockets;
 
 namespace PENet {
@@ -19,6 +20,7 @@ namespace PENet {
     public abstract class PESession<T> where T : PEMsg {
         private Socket skt;
         private Action closeCB;
+        public IPEndPoint remoteEndPoint { get => (IPEndPoint)skt.RemoteEndPoint; }
 
         #region Recevie
         /// <summary>

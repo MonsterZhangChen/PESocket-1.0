@@ -36,4 +36,35 @@ public class PECommon
         LogLevel lv = (LogLevel)tp;
         PETool.LogMsg(msg, lv);
     }
+
+    /// <summary>
+    /// 计算玩家的战斗力(策划提供公式)；
+    /// 数值运算写在PECommon里的原因:客户端需要拿他作为显示的数据，服务端需要拿这些数据做计算和存储；
+    /// </summary>
+    /// <param name="pd">玩家数据</param>
+    /// <returns></returns>
+    public static int GetFightByProps(PlayerData pd)
+    {
+        return pd.lv * 100 + pd.ad + pd.ap + pd.addef + pd.apdef + pd.dodge + pd.dodge;
+    }
+
+    /// <summary>
+    /// 获得玩家的体力上限(策划提供公式)
+    /// </summary>
+    /// <param name="pd"></param>
+    /// <returns></returns>
+    public static int GetPowerLimit(PlayerData pd)
+    {
+        return (pd.lv - 1) / 1 * 15 + 150;
+    }
+
+    /// <summary>
+    /// 通过等级，获取升级所需的经验值
+    /// </summary>
+    /// <param name="lv">等级</param>
+    /// <returns></returns>
+    public static int GetExpValByLv(int lv)
+    {
+        return 100 * lv * lv;
+    }
 }
