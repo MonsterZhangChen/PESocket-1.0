@@ -65,6 +65,7 @@ public class DBMgr
                             power = reader.GetInt32("power"),
                             coin = reader.GetInt32("coin"),
                             diamond = reader.GetInt32("diamond"),
+                            crystal = reader.GetInt32("crystal"),
                             hp = reader.GetInt32("hp"),
                             ad = reader.GetInt32("ad"),
                             ap = reader.GetInt32("ap"),
@@ -73,7 +74,8 @@ public class DBMgr
                             dodge = reader.GetInt32("dodge"),
                             pierce = reader.GetInt32("pierce"),
                             critical = reader.GetInt32("critical"),
-                            guideid = reader.GetInt32("guideid")
+                            guideid = reader.GetInt32("guideid"),
+                            strongArr = ParseStrongStr(reader.GetString("strong")),
                         };
                     };
                 }
@@ -97,6 +99,7 @@ public class DBMgr
                     power = 150,
                     coin = 5000,
                     diamond = 500,
+                    crystal=600,
                     hp = 2000,
                     ad = 275,
                     ap = 265,
@@ -105,16 +108,53 @@ public class DBMgr
                     dodge = 7,
                     pierce = 5,
                     critical = 2,
-                    guideid = 1001
+                    guideid = 1001,
+                    strongArr=new int[6]
                     //to add
                 };
                 //调试：这里必须换上新id,否则会造成缓冲区的id错误
                 playerData.id=InsertNewAcctData(acct, pass, playerData);
             }
         }
-
         return playerData;
     }
+
+    #region strong
+    /// <summary>
+    /// 解析升级字符串数据：1#2#3#2#1#6#3#
+    /// </summary>
+    /// <param name="strongArrStr">升级字符串</param>
+    /// <returns></returns>
+    private int[] ParseStrongStr(string strongArrStr)
+    {
+        string[] strongStrArr = strongArrStr.Split('#');
+        int[] _StrongArr = new int[6];
+        for (int i = 0; i < strongStrArr.Length; i++)
+        {
+            if (strongStrArr[i] == "") continue;
+            if (!int.TryParse(strongStrArr[i], out _StrongArr[i]))
+            {
+                PECommon.Log("Parse Strong Data Error", LogType.error);
+            }
+        }
+        return _StrongArr;
+    }
+
+    /// <summary>
+    /// 创建升级字符串数据
+    /// </summary>
+    /// <param name="strongArr"></param>
+    /// <returns></returns>
+    private string BulidStrongStr(int[] strongArr)
+    {
+        string strongStr = "";
+        for (int i = 0; i < strongArr.Length; i++)
+        {
+            strongStr += strongArr[i].ToString() + "#";
+        }
+        return strongStr;
+    }
+    #endregion
 
     /// <summary>
     /// 插入玩家数据
@@ -130,9 +170,9 @@ public class DBMgr
         {
             MySqlCommand cmd = new MySqlCommand
                 ("insert into account set acct=@acct,pass=@pass,name=@name,level=@level," +
-                "exp=@exp,power=@power,coin=@coin,diamond=@diamond,hp=@hp,ad=@ad,ap=@ap," +
+                "exp=@exp,power=@power,coin=@coin,diamond=@diamond,crystal=@crystal,hp=@hp,ad=@ad,ap=@ap," +
                 "addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical," +
-                "guideid=@guideid", conn);
+                "guideid=@guideid,strong=@strong", conn);
             cmd.Parameters.AddWithValue("acct", acct);
             cmd.Parameters.AddWithValue("pass", pass);
             cmd.Parameters.AddWithValue("name", pd.name);
@@ -141,6 +181,7 @@ public class DBMgr
             cmd.Parameters.AddWithValue("power", pd.power);
             cmd.Parameters.AddWithValue("coin", pd.coin);
             cmd.Parameters.AddWithValue("diamond", pd.diamond);
+            cmd.Parameters.AddWithValue("crystal", pd.crystal);
             cmd.Parameters.AddWithValue("hp", pd.hp);
             cmd.Parameters.AddWithValue("ad", pd.ad);
             cmd.Parameters.AddWithValue("ap", pd.ap);
@@ -150,6 +191,7 @@ public class DBMgr
             cmd.Parameters.AddWithValue("pierce", pd.pierce);
             cmd.Parameters.AddWithValue("critical", pd.critical);
             cmd.Parameters.AddWithValue("guideid", pd.guideid);
+            cmd.Parameters.AddWithValue("strong", BulidStrongStr(pd.strongArr));
             //to add
             cmd.ExecuteNonQuery();
             id = (int)cmd.LastInsertedId;
@@ -203,8 +245,8 @@ public class DBMgr
         try
         {
             //关于charset:字符编码，用Navicat时得加上不然会乱码
-            MySqlCommand cmd = new MySqlCommand("update account set name=@name,level=@level,exp=@exp,power=@power,coin=@coin,diamond=@diamond," +
-                "hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,guideid=@guideid where id=@id", conn);
+            MySqlCommand cmd = new MySqlCommand("update account set name=@name,level=@level,exp=@exp,power=@power,coin=@coin,diamond=@diamond,crystal=@crystal," +
+                "hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,guideid=@guideid,strong=@strong where id=@id", conn);
             cmd.Parameters.AddWithValue("id", playerData.id);
             cmd.Parameters.AddWithValue("name", playerData.name);
             cmd.Parameters.AddWithValue("level", playerData.lv);
@@ -212,6 +254,7 @@ public class DBMgr
             cmd.Parameters.AddWithValue("power", playerData.power);
             cmd.Parameters.AddWithValue("coin", playerData.coin);
             cmd.Parameters.AddWithValue("diamond", playerData.diamond);
+            cmd.Parameters.AddWithValue("crystal", playerData.crystal);
             cmd.Parameters.AddWithValue("hp",playerData.hp);
             cmd.Parameters.AddWithValue("ad", playerData.ad);
             cmd.Parameters.AddWithValue("ap", playerData.ap);
@@ -221,6 +264,7 @@ public class DBMgr
             cmd.Parameters.AddWithValue("pierce", playerData.pierce);
             cmd.Parameters.AddWithValue("critical", playerData.critical);
             cmd.Parameters.AddWithValue("guideid", playerData.guideid);
+            cmd.Parameters.AddWithValue("strong", BulidStrongStr(playerData.strongArr));
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             isUpdate = true;

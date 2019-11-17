@@ -25,6 +25,11 @@
             玩家数据
             </summary>
         </member>
+        <member name="F:PlayerData.crystal">
+            <summary>
+            水晶
+            </summary>
+        </member>
         <member name="F:PlayerData.dodge">
             <summary>
             //闪避概率
@@ -43,6 +48,11 @@
         <member name="F:PlayerData.guideid">
             <summary>
             任务引导id
+            </summary>
+        </member>
+        <member name="F:PlayerData.strongArr">
+            <summary>
+            玩家装备信息的数组，索引号代表装备的位置，索引的值代表该位置装备的星级
             </summary>
         </member>
         <member name="T:ReqRename">
@@ -90,6 +100,21 @@
             完成任务后的等级
             </summary>
         </member>
+        <member name="T:ReqStrong">
+            <summary>
+            请求强化数据
+            </summary>
+        </member>
+        <member name="F:ReqStrong.pos">
+            <summary>
+            请求强化装备的位置
+            </summary>
+        </member>
+        <member name="T:RspStrong">
+            <summary>
+            响应强化数据
+            </summary>
+        </member>
         <member name="T:ErrorCode">
             <summary>
             用于判断消息错误类型的枚举,该枚举直接赋值给PEMsg的err
@@ -126,6 +151,26 @@
             服务器数据异常
             </summary>
         </member>
+        <member name="F:ErrorCode.LackLevel">
+            <summary>
+            等级不足
+            </summary>
+        </member>
+        <member name="F:ErrorCode.LackCoin">
+            <summary>
+            缺少金币
+            </summary>
+        </member>
+        <member name="F:ErrorCode.LackDiamond">
+            <summary>
+            缺少钻石
+            </summary>
+        </member>
+        <member name="F:ErrorCode.LackCrystal">
+            <summary>
+            缺少水晶
+            </summary>
+        </member>
         <member name="T:CMD">
             <summary>
             命令号：用于判断消息类型的枚举,该枚举直接赋值给PEMsg的cmd字段
@@ -159,6 +204,16 @@
         <member name="F:CMD.RspGuide">
             <summary>
             完成任务响应数据类型
+            </summary>
+        </member>
+        <member name="F:CMD.ReqStrong">
+            <summary>
+            请求强化类型
+            </summary>
+        </member>
+        <member name="F:CMD.RspStrong">
+            <summary>
+            响应强化类型
             </summary>
         </member>
         <member name="T:SrvCfg">

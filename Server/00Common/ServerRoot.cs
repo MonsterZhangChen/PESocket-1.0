@@ -29,6 +29,7 @@ public class ServerRoot
         CfgSvc.Instance.Init();
         LoginSys.Instance.Init();
         GuideSys.Instance.Init();
+        StrongSys.Instance.Init();
     }
 
     /// <summary>

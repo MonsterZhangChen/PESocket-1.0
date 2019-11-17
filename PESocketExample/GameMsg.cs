@@ -16,6 +16,9 @@ public class GameMsg : PEMsg
 
     public ReqGuide reqGuide;
     public RspGuide rspGuide;
+
+    public ReqStrong reqStrong;
+    public RspStrong rspStrong;
 }
 
 #region 登录相关数据
@@ -51,6 +54,11 @@ public class PlayerData
     public int power;
     public int coin;
     public int diamond;
+    /// <summary>
+    /// 水晶
+    /// </summary>
+    public int crystal;
+
     public int hp;
     public int ad;
     public int ap;
@@ -72,8 +80,14 @@ public class PlayerData
     /// 任务引导id
     /// </summary>
     public int guideid;
+    /// <summary>
+    /// 玩家装备信息的数组，索引号代表装备的位置，索引的值代表该位置装备的星级
+    /// </summary>
+    public int[] strongArr;
 }
+#endregion
 
+#region 命名相关
 /// <summary>
 /// 请求重命名数据
 /// </summary>
@@ -132,6 +146,34 @@ public class RspGuide
 
 #endregion
 
+#region 强化相关
+/// <summary>
+/// 请求强化数据
+/// </summary>
+[Serializable]
+public class ReqStrong
+{
+    /// <summary>
+    /// 请求强化装备的位置
+    /// </summary>
+    public int pos;
+}
+/// <summary>
+/// 响应强化数据
+/// </summary>
+[Serializable]
+public class RspStrong
+{
+    public int coin;
+    public int crystal;
+    public int hp;
+    public int ad;
+    public int ap;
+    public int addef;
+    public int apdef;
+    public int[] strongArr;
+}
+#endregion
 
 /// <summary>
 /// 用于判断消息错误类型的枚举,该枚举直接赋值给PEMsg的err
@@ -162,7 +204,23 @@ public enum ErrorCode
     /// <summary>
     /// 服务器数据异常
     /// </summary>
-    ServerDataError
+    ServerDataError,
+    /// <summary>
+    /// 等级不足
+    /// </summary>
+    LackLevel,
+    /// <summary>
+    /// 缺少金币
+    /// </summary>
+    LackCoin,
+    /// <summary>
+    /// 缺少钻石
+    /// </summary>
+    LackDiamond,
+    /// <summary>
+    /// 缺少水晶
+    /// </summary>
+    LackCrystal
 }
 
 
@@ -193,11 +251,20 @@ public enum CMD
     /// <summary>
     /// 完成任务请求数据类型
     /// </summary>
-    ReqGuide=200,
+    ReqGuide=201,
     /// <summary>
     /// 完成任务响应数据类型
     /// </summary>
-    RspGuide=201,
+    RspGuide=202,
+    //强化升级相关
+    /// <summary>
+    /// 请求强化类型
+    /// </summary>
+    ReqStrong=203,
+    /// <summary>
+    /// 响应强化类型
+    /// </summary>
+    RspStrong=204
 }
 
 /// <summary>

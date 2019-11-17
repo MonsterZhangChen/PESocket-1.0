@@ -67,6 +67,7 @@
     <Compile Include="01Service\NetSvc\NetSvc.cs" />
     <Compile Include="02System\GuideSys.cs" />
     <Compile Include="02System\LoginSys.cs" />
+    <Compile Include="02System\StrongSys.cs" />
     <Compile Include="03Cache\CacheSvc.cs" />
     <Compile Include="04DB\DBMgr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
