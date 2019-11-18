@@ -50,7 +50,7 @@
   <ItemGroup>
     <Reference Include="MySql.Data, Version=8.0.14.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Users\章校长\source\repos\04-数据库的连接\Socket网络编程\数据库操作\bin\Debug\MySql.Data.dll</HintPath>
+      <HintPath>dll\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -65,6 +65,8 @@
     <Compile Include="00Common\ServerStart.cs" />
     <Compile Include="01Service\CfgSvc\CfgSvc.cs" />
     <Compile Include="01Service\NetSvc\NetSvc.cs" />
+    <Compile Include="02System\BuySys.cs" />
+    <Compile Include="02System\ChatSys.cs" />
     <Compile Include="02System\GuideSys.cs" />
     <Compile Include="02System\LoginSys.cs" />
     <Compile Include="02System\StrongSys.cs" />

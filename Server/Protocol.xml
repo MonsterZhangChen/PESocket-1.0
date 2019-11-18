@@ -115,6 +115,32 @@
             响应强化数据
             </summary>
         </member>
+        <member name="T:SndChat">
+            <summary>
+            接收聊天数据
+            </summary>
+        </member>
+        <member name="T:PshChat">
+            <summary>
+            推送聊天数据
+            </summary>
+        </member>
+        <member name="T:ReqBuy">
+            <summary>
+            请求购买数据
+            </summary>
+        </member>
+        <member name="F:ReqBuy.type">
+            <summary>
+            购买物品的类型；
+            0，体力；1，金币
+            </summary>
+        </member>
+        <member name="F:ReqBuy.cost">
+            <summary>
+            购买消耗的钻石数目
+            </summary>
+        </member>
         <member name="T:ErrorCode">
             <summary>
             用于判断消息错误类型的枚举,该枚举直接赋值给PEMsg的err
@@ -214,6 +240,26 @@
         <member name="F:CMD.RspStrong">
             <summary>
             响应强化类型
+            </summary>
+        </member>
+        <member name="F:CMD.SndChat">
+            <summary>
+            发送聊天消息类型
+            </summary>
+        </member>
+        <member name="F:CMD.PshChat">
+            <summary>
+            广播聊天消息类型
+            </summary>
+        </member>
+        <member name="F:CMD.ReqBuy">
+            <summary>
+            请求购买类型
+            </summary>
+        </member>
+        <member name="F:CMD.RspBuy">
+            <summary>
+            响应购买类型
             </summary>
         </member>
         <member name="T:SrvCfg">

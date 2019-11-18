@@ -51,6 +51,20 @@ public class CacheSvc
     }
 
     /// <summary>
+    /// 获取线上的网络会话
+    /// </summary>
+    /// <returns></returns>
+    public List<ServerSession> GetOnlineSvrSessions()
+    {
+        List<ServerSession> serverSessions = new List<ServerSession>();
+        foreach (var item in onlineSessionDic)
+        {
+            serverSessions.Add(item.Key);
+        }
+        return serverSessions;
+    }
+
+    /// <summary>
     /// 获取玩家的数据，如果获取失败(账密不匹配)，则返回空
     /// </summary>
     /// <param name="acct">账号</param>

@@ -19,6 +19,12 @@ public class GameMsg : PEMsg
 
     public ReqStrong reqStrong;
     public RspStrong rspStrong;
+
+    public SndChat sndChat;
+    public PshChat pshChat;
+
+    public ReqBuy reqBuy;
+    public RspBuy RspBuy;
 }
 
 #region 登录相关数据
@@ -175,6 +181,53 @@ public class RspStrong
 }
 #endregion
 
+#region 聊天相关
+/// <summary>
+/// 接收聊天数据
+/// </summary>
+[Serializable]
+public class SndChat
+{
+    public string chat;
+}
+/// <summary>
+/// 推送聊天数据
+/// </summary>
+[Serializable]
+public class PshChat
+{
+    public string name;
+    public string chat;
+}
+#endregion
+
+#region 购买交易相关
+/// <summary>
+/// 请求购买数据
+/// </summary>
+[Serializable]
+public class ReqBuy
+{
+    /// <summary>
+    /// 购买物品的类型；
+    /// 0，体力；1，金币
+    /// </summary>
+    public int type;
+    /// <summary>
+    /// 购买消耗的钻石数目
+    /// </summary>
+    public int cost;
+}
+[Serializable]
+public class RspBuy
+{
+    public int type;
+    public int coin;
+    public int diamond;
+    public int power;
+}
+#endregion
+
 /// <summary>
 /// 用于判断消息错误类型的枚举,该枚举直接赋值给PEMsg的err
 /// 如果消息的错误类型不为None，则不再将消息分发到业务逻辑处理，而是直接在UI上显示错误内容
@@ -260,11 +313,31 @@ public enum CMD
     /// <summary>
     /// 请求强化类型
     /// </summary>
-    ReqStrong=203,
+    ReqStrong=301,
     /// <summary>
     /// 响应强化类型
     /// </summary>
-    RspStrong=204
+    RspStrong=302,
+    //聊天相关
+    /// <summary>
+    /// 发送聊天消息类型
+    /// </summary>
+    SndChat=401,
+    /// <summary>
+    /// 广播聊天消息类型
+    /// </summary>
+    PshChat=402,
+    //购买交易相关
+    /// <summary>
+    /// 请求购买类型
+    /// </summary>
+    ReqBuy=501,
+    /// <summary>
+    /// 响应购买类型
+    /// </summary>
+    RspBuy=502,
+
+
 }
 
 /// <summary>

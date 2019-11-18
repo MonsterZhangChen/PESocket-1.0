@@ -30,6 +30,8 @@ public class ServerRoot
         LoginSys.Instance.Init();
         GuideSys.Instance.Init();
         StrongSys.Instance.Init();
+        ChatSys.Instance.Init();
+        BuySys.Instance.Init();
     }
 
     /// <summary>
