@@ -45,7 +45,7 @@ class GuideSys
             //缓存数据变化
             pd.guideid++;
             pd.coin += gtc.coin;
-            CaculExp(pd, gtc.exp);
+            PECommon.CaculExp(pd, gtc.exp);
             if (cacheSvc.UpdatePlayerData(pd.id, pd))
             {
                 msg.rspGuide = new RspGuide
@@ -68,31 +68,5 @@ class GuideSys
         pack.session.SendMsg(msg);
     }
 
-    /// <summary>
-    /// 计算玩家经验引起的等级和经验变化
-    /// </summary>
-    /// <param name="pd">玩家数据</param>
-    /// <param name="addExp">增加的经验</param>
-    public void CaculExp(PlayerData pd,int addExp)
-    {
-        int curtLv = pd.lv;
-        int curtExp = pd.exp;
-        int remExp = addExp;
-        while (true)
-        {
-            int upNeedExp = PECommon.GetExpValByLv(curtLv) - curtExp;
-            if (remExp >= upNeedExp)
-            {
-                curtLv++;
-                curtExp = 0;
-                remExp -= upNeedExp;
-            }
-            else
-            {
-                pd.lv = curtLv;
-                pd.exp = curtExp+remExp;
-                break;
-            }
-        }
-    }
+   
 }

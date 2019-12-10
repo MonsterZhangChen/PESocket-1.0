@@ -35,7 +35,7 @@ public class BuySys
         };
         PlayerData pd = cacheSvc.GetPlayerDataBySettion(pack.session);
 
-        if (data.cost < pd.diamond)
+        if (data.cost > pd.diamond)
         {
             msg.err = (int)ErrorCode.LackDiamond;
         }

@@ -65,11 +65,15 @@
     <Compile Include="00Common\ServerStart.cs" />
     <Compile Include="01Service\CfgSvc\CfgSvc.cs" />
     <Compile Include="01Service\NetSvc\NetSvc.cs" />
+    <Compile Include="01Service\TimerSvc\PETimer.cs" />
+    <Compile Include="01Service\TimerSvc\TimerSvc.cs" />
     <Compile Include="02System\BuySys.cs" />
     <Compile Include="02System\ChatSys.cs" />
     <Compile Include="02System\GuideSys.cs" />
     <Compile Include="02System\LoginSys.cs" />
+    <Compile Include="02System\PowerSys.cs" />
     <Compile Include="02System\StrongSys.cs" />
+    <Compile Include="02System\TaskSys.cs" />
     <Compile Include="03Cache\CacheSvc.cs" />
     <Compile Include="04DB\DBMgr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

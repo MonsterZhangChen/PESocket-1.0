@@ -31,6 +31,7 @@ class CfgSvc
         PECommon.Log("CfgSvc Init Done!");
         InitGuideTaskCfg(@"E:\U3dProject\DarkGod\Assets\Resources\ResCfgs\guide.xml");
         InitStrongCfg(@"E:\U3dProject\DarkGod\Assets\Resources\ResCfgs\strong.xml");
+        InitTaskRewrdCfg(@"E:\U3dProject\DarkGod\Assets\Resources\ResCfgs\taskreward.xml");
     }
 
     #region 任务引导信息配置
@@ -172,6 +173,58 @@ class CfgSvc
     }
 
     #endregion
+
+    #region 任务奖励配置
+    private Dictionary<int, TaskRewardCfg> taskRewardDic = new Dictionary<int, TaskRewardCfg>();
+    private void InitTaskRewrdCfg(string path)
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.Load(path);
+        XmlNodeList nodLst = doc.SelectSingleNode("root").ChildNodes;
+        for (int i = 0; i < nodLst.Count; i++)
+        {
+            XmlElement ele = nodLst[i] as XmlElement;
+            if (ele.GetAttributeNode("ID") == null)
+            {
+                continue;
+            }
+            int ID = Convert.ToInt32(ele.GetAttributeNode("ID").InnerText);
+            TaskRewardCfg trc = new TaskRewardCfg
+            {
+                ID = ID
+            };
+            foreach (XmlElement e in nodLst[i].ChildNodes)
+            {
+                switch (e.Name)
+                {
+                    case "count":
+                        trc.count = int.Parse(e.InnerText);
+                        break;
+                    case "exp":
+                        trc.exp = int.Parse(e.InnerText);
+                        break;
+                    case "coin":
+                        trc.coin = int.Parse(e.InnerText);
+                        break;
+                }
+            }
+            taskRewardDic.Add(ID, trc);
+        }
+        PECommon.Log("TaskRewardCfg Init Done.");
+    }
+
+    public TaskRewardCfg GetTaskRewardCfg(int id)
+    {
+        TaskRewardCfg trc = null;
+        if (taskRewardDic.TryGetValue(id, out trc))
+        {
+            return trc;
+        }
+        return null;
+    }
+    #endregion
+
+
 }
 
 
@@ -223,6 +276,26 @@ public class StrongCfg : BaseData<StrongCfg>
     /// 升级所需水晶
     /// </summary>
     public int crystal;
+}
+
+/// <summary>
+/// 任务奖励配置
+/// </summary>
+public class TaskRewardCfg : BaseData<TaskRewardCfg>
+{
+    public int taskName;
+    public int count;
+    public int exp;
+    public int coin;
+}
+
+/// <summary>
+/// 任务进度数据(这个数据是用户产生的并可变的)
+/// </summary>
+public class TaskRewardData : BaseData<TaskRewardData>
+{
+    public int prgs;
+    public bool taked;
 }
 
 /// <summary>

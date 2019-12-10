@@ -63,7 +63,8 @@ namespace PENet {
         public static Action<string, int> logCB = null;
 
         /// <summary>
-        /// 打印日志；它会先给消息加一个时间前缀
+        /// 打印日志；它会先给消息加一个时间前缀;
+        /// 如果log为false，不打印任何消息；否则：
         /// 如果委托成员logCB为空，调用控制台打印，否则调用logCB的逻辑；
         /// logCB由聚合它的PESocket()的SetLog方法设置
         /// </summary>

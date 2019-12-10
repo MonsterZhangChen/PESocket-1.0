@@ -10,16 +10,6 @@
             它应该是客户端和服务端通用的类型
             </summary>
         </member>
-        <member name="T:ReqLogin">
-            <summary>
-            请求登录数据
-            </summary>
-        </member>
-        <member name="T:RspLogin">
-            <summary>
-            登录响应数据
-            </summary>
-        </member>
         <member name="T:PlayerData">
             <summary>
             玩家数据
@@ -53,6 +43,26 @@
         <member name="F:PlayerData.strongArr">
             <summary>
             玩家装备信息的数组，索引号代表装备的位置，索引的值代表该位置装备的星级
+            </summary>
+        </member>
+        <member name="F:PlayerData.time">
+            <summary>
+            表示玩家登陆的时间
+            </summary>
+        </member>
+        <member name="F:PlayerData.taskStrArr">
+            <summary>
+            代表完成任务的数据，字符串格式：0|1|0，代表id|完成进度|未完成
+            </summary>
+        </member>
+        <member name="T:ReqLogin">
+            <summary>
+            请求登录数据
+            </summary>
+        </member>
+        <member name="T:RspLogin">
+            <summary>
+            登录响应数据
             </summary>
         </member>
         <member name="T:ReqRename">
@@ -141,6 +151,21 @@
             购买消耗的钻石数目
             </summary>
         </member>
+        <member name="T:PshPower">
+            <summary>
+            推送体力恢复数据
+            </summary>
+        </member>
+        <member name="T:ReqTakeTaskReward">
+            <summary>
+            请求任务完成数据
+            </summary>
+        </member>
+        <member name="T:RspTakeTaskReward">
+            <summary>
+            响应任务完成数据
+            </summary>
+        </member>
         <member name="T:ErrorCode">
             <summary>
             用于判断消息错误类型的枚举,该枚举直接赋值给PEMsg的err
@@ -175,6 +200,11 @@
         <member name="F:ErrorCode.ServerDataError">
             <summary>
             服务器数据异常
+            </summary>
+        </member>
+        <member name="F:ErrorCode.ClientDataError">
+            <summary>
+            客户端数据异常
             </summary>
         </member>
         <member name="F:ErrorCode.LackLevel">
@@ -262,6 +292,21 @@
             响应购买类型
             </summary>
         </member>
+        <member name="F:CMD.PshPower">
+            <summary>
+            推送体力恢复类型
+            </summary>
+        </member>
+        <member name="F:CMD.ReqTakeTaskReward">
+            <summary>
+            请求完成任务类型
+            </summary>
+        </member>
+        <member name="F:CMD.RspTakeTaskReward">
+            <summary>
+            响应完成任务类型
+            </summary>
+        </member>
         <member name="T:SrvCfg">
             <summary>
             服务器配置
@@ -301,6 +346,16 @@
             </summary>
             <param name="lv">等级</param>
             <returns></returns>
+        </member>
+        <member name="F:PECommon.PowerAddMinute">
+            <summary>
+            体力恢复的间隔时间(单位：分钟，测试单位为秒钟)
+            </summary>
+        </member>
+        <member name="F:PECommon.PowerAddCount">
+            <summary>
+            体力恢复的数量
+            </summary>
         </member>
     </members>
 </doc>

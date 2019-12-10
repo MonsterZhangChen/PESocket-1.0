@@ -7,6 +7,7 @@
 *****************************************************/
 using MySql.Data.MySqlClient;
 using System;
+using System.Linq;
 /// <summary>
 /// 数据库管理类
 /// </summary>
@@ -76,6 +77,8 @@ public class DBMgr
                             critical = reader.GetInt32("critical"),
                             guideid = reader.GetInt32("guideid"),
                             strongArr = ParseStrongStr(reader.GetString("strong")),
+                            time = reader.GetInt64("time"),
+                            taskStrArr = ParseTaskStr(reader.GetString("task")),
                         };
                     };
                 }
@@ -96,10 +99,10 @@ public class DBMgr
                     name = "",
                     lv = 1,
                     exp = 0,
-                    power = 150,
+                    power = 100,
                     coin = 15000,
                     diamond = 500,
-                    crystal=1600,
+                    crystal = 1600,
                     hp = 2000,
                     ad = 275,
                     ap = 265,
@@ -109,7 +112,9 @@ public class DBMgr
                     pierce = 5,
                     critical = 2,
                     guideid = 1001,
-                    strongArr=new int[6]
+                    strongArr = new int[6],
+                    taskStrArr= new string[]{"1#0#0", "2#0#0","3#0#0","4#0#0","5#0#0","6#0#0" },
+                time = TimerSvc.Instance.GetNowTime(),
                     //to add
                 };
                 //调试：这里必须换上新id,否则会造成缓冲区的id错误
@@ -119,7 +124,7 @@ public class DBMgr
         return playerData;
     }
 
-    #region strong
+    #region parse&Creat String
     /// <summary>
     /// 解析升级字符串数据：1#2#3#2#1#6#3#
     /// </summary>
@@ -140,6 +145,8 @@ public class DBMgr
         return _StrongArr;
     }
 
+    
+
     /// <summary>
     /// 创建升级字符串数据
     /// </summary>
@@ -153,6 +160,27 @@ public class DBMgr
             strongStr += strongArr[i].ToString() + "#";
         }
         return strongStr;
+    }
+
+    /// <summary>
+    /// 解析任务奖励数据字符串
+    /// </summary>
+    /// <param name="taskStr">任务字符串，数据格式：0#1#0|1#2#1|2#2#0|3#2#0|4#2#0|5#2#0|</param>
+    /// <returns></returns>
+    private string[] ParseTaskStr(string taskStr)
+    {
+        string[] taskStrArr = taskStr.Split('|');
+        return taskStrArr.Where(s => s.Length >= 5).ToArray();
+    }
+
+    private string BulidTaskStr(string[] taskStrArr)
+    {
+        string taskStr="";
+        for (int i = 0; i < taskStrArr.Length; i++)
+        {
+            taskStr+= taskStrArr[i] + "|";
+;        }
+        return taskStr;
     }
     #endregion
 
@@ -172,7 +200,7 @@ public class DBMgr
                 ("insert into account set acct=@acct,pass=@pass,name=@name,level=@level," +
                 "exp=@exp,power=@power,coin=@coin,diamond=@diamond,crystal=@crystal,hp=@hp,ad=@ad,ap=@ap," +
                 "addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical," +
-                "guideid=@guideid,strong=@strong", conn);
+                "guideid=@guideid,strong=@strong,time=@time,task=@task", conn);
             cmd.Parameters.AddWithValue("acct", acct);
             cmd.Parameters.AddWithValue("pass", pass);
             cmd.Parameters.AddWithValue("name", pd.name);
@@ -192,6 +220,8 @@ public class DBMgr
             cmd.Parameters.AddWithValue("critical", pd.critical);
             cmd.Parameters.AddWithValue("guideid", pd.guideid);
             cmd.Parameters.AddWithValue("strong", BulidStrongStr(pd.strongArr));
+            cmd.Parameters.AddWithValue("time", pd.time);
+            cmd.Parameters.AddWithValue("task", pd.taskStrArr);
             //to add
             cmd.ExecuteNonQuery();
             id = (int)cmd.LastInsertedId;
@@ -246,7 +276,8 @@ public class DBMgr
         {
             //关于charset:字符编码，用Navicat时得加上不然会乱码
             MySqlCommand cmd = new MySqlCommand("update account set name=@name,level=@level,exp=@exp,power=@power,coin=@coin,diamond=@diamond,crystal=@crystal," +
-                "hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,guideid=@guideid,strong=@strong where id=@id", conn);
+                "hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,guideid=@guideid,strong=@strong,time=@time,task=@task where id=@id"
+                , conn);
             cmd.Parameters.AddWithValue("id", playerData.id);
             cmd.Parameters.AddWithValue("name", playerData.name);
             cmd.Parameters.AddWithValue("level", playerData.lv);
@@ -265,6 +296,8 @@ public class DBMgr
             cmd.Parameters.AddWithValue("critical", playerData.critical);
             cmd.Parameters.AddWithValue("guideid", playerData.guideid);
             cmd.Parameters.AddWithValue("strong", BulidStrongStr(playerData.strongArr));
+            cmd.Parameters.AddWithValue("time", playerData.time);
+            cmd.Parameters.AddWithValue("task", BulidTaskStr(playerData.taskStrArr));
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             isUpdate = true;

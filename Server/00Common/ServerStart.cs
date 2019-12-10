@@ -7,6 +7,7 @@
 *****************************************************/
 using PENet;
 using System;
+using System.Threading;
 
 namespace Server
 {
@@ -18,6 +19,7 @@ namespace Server
             while (true)//这里需要优化，不然一秒可能几千次
             {
                 ServerRoot.Instance.Update();
+                Thread.Sleep(20);
             }
         }
     }

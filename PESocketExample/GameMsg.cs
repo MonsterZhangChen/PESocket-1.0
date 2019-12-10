@@ -25,27 +25,13 @@ public class GameMsg : PEMsg
 
     public ReqBuy reqBuy;
     public RspBuy RspBuy;
+
+    public PshPower pshPower;
+
+    public ReqTakeTaskReward reqTakeTaskReward;
+    public RspTakeTaskReward rspTakeTaskReward;
 }
 
-#region 登录相关数据
-/// <summary>
-/// 请求登录数据
-/// </summary>
-[Serializable]
-public class ReqLogin
-{
-    public string acct;
-    public string pass;
-}
-
-/// <summary>
-/// 登录响应数据
-/// </summary>
-[Serializable]
-public class RspLogin
-{
-    public PlayerData playerData;
-}
 
 /// <summary>
 /// 玩家数据
@@ -90,7 +76,37 @@ public class PlayerData
     /// 玩家装备信息的数组，索引号代表装备的位置，索引的值代表该位置装备的星级
     /// </summary>
     public int[] strongArr;
+    /// <summary>
+    /// 表示玩家登陆的时间
+    /// </summary>
+    public long time;
+    /// <summary>
+    /// 代表完成任务的数据，字符串格式：0|1|0，代表id|完成进度|未完成
+    /// </summary>
+    public string[] taskStrArr;
 }
+
+#region 登录相关数据
+/// <summary>
+/// 请求登录数据
+/// </summary>
+[Serializable]
+public class ReqLogin
+{
+    public string acct;
+    public string pass;
+}
+
+/// <summary>
+/// 登录响应数据
+/// </summary>
+[Serializable]
+public class RspLogin
+{
+    public PlayerData playerData;
+}
+
+
 #endregion
 
 #region 命名相关
@@ -228,6 +244,39 @@ public class RspBuy
 }
 #endregion
 
+#region 体力恢复相关
+/// <summary>
+/// 推送体力恢复数据
+/// </summary>
+[Serializable]
+public class PshPower
+{
+    public int power;
+}
+#endregion
+
+#region 任务奖励相关
+/// <summary>
+/// 请求任务完成数据
+/// </summary>
+[Serializable]
+public class ReqTakeTaskReward
+{
+    public int rid;
+}
+/// <summary>
+/// 响应任务完成数据
+/// </summary>
+[Serializable]
+public class RspTakeTaskReward
+{
+    public int coin;
+    public int exp;
+    public int lv;
+    public string[] taskArr;
+}
+#endregion
+
 /// <summary>
 /// 用于判断消息错误类型的枚举,该枚举直接赋值给PEMsg的err
 /// 如果消息的错误类型不为None，则不再将消息分发到业务逻辑处理，而是直接在UI上显示错误内容
@@ -258,6 +307,10 @@ public enum ErrorCode
     /// 服务器数据异常
     /// </summary>
     ServerDataError,
+    /// <summary>
+    /// 客户端数据异常
+    /// </summary>
+    ClientDataError,
     /// <summary>
     /// 等级不足
     /// </summary>
@@ -336,8 +389,19 @@ public enum CMD
     /// 响应购买类型
     /// </summary>
     RspBuy=502,
-
-
+    //体力恢复相关
+    /// <summary>
+    /// 推送体力恢复类型
+    /// </summary>
+    PshPower,
+    /// <summary>
+    /// 请求完成任务类型
+    /// </summary>
+    ReqTakeTaskReward,
+    /// <summary>
+    /// 响应完成任务类型
+    /// </summary>
+    RspTakeTaskReward
 }
 
 /// <summary>
@@ -345,6 +409,6 @@ public enum CMD
 /// </summary>
 public class SrvCfg
 {
-    public const string sevAddress = "10.0.117.84";
+    public const string sevAddress = "127.0.0.1";
     public const int sevPort = 17666;
 }

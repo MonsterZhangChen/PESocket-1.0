@@ -11,6 +11,7 @@ class LoginSys
 {
     private CacheSvc cacheSvc = null;
     private static LoginSys instance = null;
+    private TimerSvc timerSvc = null;
     public static LoginSys Instance
     {
         get
@@ -23,6 +24,7 @@ class LoginSys
     public void Init()
     {
         cacheSvc = CacheSvc.Instance;
+        timerSvc = TimerSvc.Instance;
         PECommon.Log("LoginSys Init Done!");
     }
 
@@ -40,7 +42,7 @@ class LoginSys
             rspLogin = new RspLogin()
             {
             },
-    };
+        };
         //当前账号已上线 产生错误码
         if (cacheSvc.IsAcctOnLine(data.acct))
         {
@@ -49,11 +51,28 @@ class LoginSys
         //当前账号未上线
         else
         {
-            PlayerData playerData = cacheSvc.GetPlayerData(data.acct, data.pass);
-            if (playerData != null)//账密匹配 产生玩家数据(这里包含了创建账号)
+            PlayerData pd = cacheSvc.GetPlayerData(data.acct, data.pass);
+            if (pd != null)//账密匹配 产生玩家数据(这里包含了创建账号)
             {
-                cacheSvc.AddAcctOnline(data.acct, pack.session, playerData);
-                rspMsg.rspLogin.playerData = playerData;
+                //更新玩家体力值
+                int power = pd.power;
+                long time = pd.time;
+                long now = TimerSvc.Instance.GetNowTime();
+                pd.time = now;
+                long millSeconds = now - time;
+                int addPower = (int)(millSeconds / (1000 * 1 * PECommon.PowerAddMinute) * PECommon.PowerAddCount);
+                if (addPower > 0)
+                {
+                    int powerMax = PECommon.GetPowerLimit(pd);
+                    pd.power = power + addPower > powerMax ? powerMax : power + addPower;
+                }
+                if (pd.power > power)
+                {
+                    cacheSvc.UpdatePlayerData(pd.id, pd);
+                }
+                //将此账号添加到字典中
+                cacheSvc.AddAcctOnline(data.acct, pack.session, pd);
+                rspMsg.rspLogin.playerData = pd;
             }
             else//账密不匹配 产生错误码
             {
@@ -116,6 +135,12 @@ class LoginSys
     /// <param name="session"></param>
     public void ClearOffLineData(ServerSession session)
     {
+        PlayerData pd = cacheSvc.GetPlayerDataBySettion(session);
+        pd.time = timerSvc.GetNowTime();
+        if (!cacheSvc.UpdatePlayerData(pd.id, pd))
+        {
+            PECommon.Log("Update OffLine Account Time Error");
+        }
         cacheSvc.AcctOffLine(session);
     }
 }

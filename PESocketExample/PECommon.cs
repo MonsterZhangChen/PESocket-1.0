@@ -67,4 +67,41 @@ public class PECommon
     {
         return 100 * lv * lv;
     }
+
+    /// <summary>
+    /// 计算玩家经验引起的等级和经验变化
+    /// </summary>
+    /// <param name="pd">玩家数据</param>
+    /// <param name="addExp">增加的经验</param>
+    public static void CaculExp(PlayerData pd, int addExp)
+    {
+        int curtLv = pd.lv;
+        int curtExp = pd.exp;
+        int remExp = addExp;
+        while (true)
+        {
+            int upNeedExp = PECommon.GetExpValByLv(curtLv) - curtExp;
+            if (remExp >= upNeedExp)
+            {
+                curtLv++;
+                curtExp = 0;
+                remExp -= upNeedExp;
+            }
+            else
+            {
+                pd.lv = curtLv;
+                pd.exp = curtExp + remExp;
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 体力恢复的间隔时间(单位：分钟，测试单位为秒钟)
+    /// </summary>
+    public const int PowerAddMinute = 5;
+    /// <summary>
+    /// 体力恢复的数量
+    /// </summary>
+    public const int PowerAddCount = 2;
 }

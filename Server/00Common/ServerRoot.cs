@@ -25,6 +25,7 @@ public class ServerRoot
         NetSvc.Instance.Init();
         DBMgr.Instance.Init();
         CacheSvc.Instance.Init();
+        TimerSvc.Instance.Init();
         //业务层
         CfgSvc.Instance.Init();
         LoginSys.Instance.Init();
@@ -32,6 +33,8 @@ public class ServerRoot
         StrongSys.Instance.Init();
         ChatSys.Instance.Init();
         BuySys.Instance.Init();
+        PowerSys.Instance.Init();
+
     }
 
     /// <summary>
@@ -40,6 +43,7 @@ public class ServerRoot
     public void Update()
     {
         NetSvc.Instance.Update();
+        TimerSvc.Instance.Update();
     }
 
     /// <summary>
@@ -54,4 +58,5 @@ public class ServerRoot
         }
         return sessionId++;
     }
+
 }

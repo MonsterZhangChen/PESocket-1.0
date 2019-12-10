@@ -32,6 +32,7 @@ public class CacheSvc
         dBMgr = DBMgr.Instance;
         PECommon.Log("CacheSvc Init Done!");
     }
+
     /// <summary>
     /// 用户账号与对应网络回话的字典
     /// </summary>
@@ -138,5 +139,14 @@ public class CacheSvc
         if(sessionKey!=null)onlineAcctDic.Remove(sessionKey);
         bool remSucc = onlineSessionDic.Remove(session);
         PECommon.Log($"Offline Result:{remSucc},sessionID:{session.sessionID}");
+    }
+
+    /// <summary>
+    /// 获取在线玩家数据
+    /// </summary>
+    /// <returns></returns>
+    public Dictionary<ServerSession,PlayerData> GetOnlineCache()
+    {
+        return onlineSessionDic;
     }
 }
