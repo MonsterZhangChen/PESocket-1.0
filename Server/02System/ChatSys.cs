@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：ChatSys.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/17 14:51   	
 	功能：聊天系统
@@ -40,6 +40,8 @@ public class ChatSys
                 chat = data.chat,
             },
         };
+        //任务进度更新
+        TaskSys.Instance.CalcTaskPrgs(pd, 6);//?需要更新吗
         //广播消息
         var lst = cacheSvc.GetOnlineSvrSessions();
         byte[] msgData = PENet.PETool.PackNetMsg(msg);//广播前提前序列化，减少次数

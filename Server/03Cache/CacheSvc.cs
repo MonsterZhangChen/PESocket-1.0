@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：CacheSvc.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/01 22:03   	
 	功能：缓存层
@@ -148,5 +148,24 @@ public class CacheSvc
     public Dictionary<ServerSession,PlayerData> GetOnlineCache()
     {
         return onlineSessionDic;
+    }
+
+    /// <summary>
+    /// 通过玩家id查询在线玩家对应的session
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public ServerSession GetOnlineServersession(int id)
+    {
+        ServerSession session = null;
+        foreach(var item in onlineSessionDic)
+        {
+            if (item.Value.id == id)
+            {
+                session = item.Key;
+                break;
+            }
+        }
+        return session;
     }
 }

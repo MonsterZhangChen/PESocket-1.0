@@ -30,6 +30,10 @@ public class GameMsg : PEMsg
 
     public ReqTakeTaskReward reqTakeTaskReward;
     public RspTakeTaskReward rspTakeTaskReward;
+    public PshTaskPrgs pshTaskPrgs;
+
+    public ReqFBFight reqFBFight;
+    public RspFBFight rspFBFight;
 }
 
 
@@ -84,6 +88,10 @@ public class PlayerData
     /// 代表完成任务的数据，字符串格式：0|1|0，代表id|完成进度|未完成
     /// </summary>
     public string[] taskStrArr;
+    /// <summary>
+    /// 代表当前副本的关卡
+    /// </summary>
+    public int fuben;
 }
 
 #region 登录相关数据
@@ -255,6 +263,26 @@ public class PshPower
 }
 #endregion
 
+#region 副本战斗相关
+/// <summary>
+/// 请求副本战斗类型
+/// </summary>
+[Serializable]
+public class ReqFBFight
+{
+    public int fbid;
+}
+/// <summary>
+/// 响应请求副本战斗类型
+/// </summary>
+[Serializable]
+public class RspFBFight
+{
+    public int fbid;
+    public int power;
+}
+#endregion
+
 #region 任务奖励相关
 /// <summary>
 /// 请求任务完成数据
@@ -273,6 +301,15 @@ public class RspTakeTaskReward
     public int coin;
     public int exp;
     public int lv;
+    public string[] taskArr;
+}
+
+/// <summary>
+/// 推送任务进度数据
+/// </summary>
+[Serializable]
+public class PshTaskPrgs
+{
     public string[] taskArr;
 }
 #endregion
@@ -326,7 +363,8 @@ public enum ErrorCode
     /// <summary>
     /// 缺少水晶
     /// </summary>
-    LackCrystal
+    LackCrystal,
+    LackPower
 }
 
 
@@ -393,15 +431,28 @@ public enum CMD
     /// <summary>
     /// 推送体力恢复类型
     /// </summary>
-    PshPower,
+    PshPower=601,
+    //任务奖励相关
     /// <summary>
     /// 请求完成任务类型
     /// </summary>
-    ReqTakeTaskReward,
+    ReqTakeTaskReward=701,
     /// <summary>
     /// 响应完成任务类型
     /// </summary>
-    RspTakeTaskReward
+    RspTakeTaskReward=702,
+    /// <summary>
+    /// 推送进度任务类型
+    /// </summary>
+    PshTaskPrgs=703,
+    /// <summary>
+    /// 请求副本战斗类型
+    /// </summary>
+    ReqFBFight=801,
+    /// <summary>
+    /// 响应副本战斗类型
+    /// </summary>
+    RspFBFight=802
 }
 
 /// <summary>

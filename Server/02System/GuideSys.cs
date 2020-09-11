@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：GuideSys.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/09 16:50   	
 	功能：任务引导业务系统
@@ -41,6 +41,11 @@ class GuideSys
         PlayerData pd = cacheSvc.GetPlayerDataBySettion(pack.session);
         if (pd.guideid == data.guideid)//一次安全校验，如果客户端数据和服务端对不上，直接踢下线
         {
+            //是否为智者引导任务
+            if (pd.guideid == 1001)
+            {
+                TaskSys.Instance.CalcTaskPrgs(pd, 1);
+            }
             GuideTaskCfg gtc = cfgSvc.GetGuideTaskCfgData(pd.guideid);
             //缓存数据变化
             pd.guideid++;

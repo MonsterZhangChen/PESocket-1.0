@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：TimerSvc.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/24 14:13   	
 	功能：计时服务
@@ -29,7 +29,7 @@ class TimerSvc
     public void Init()
     {
         PECommon.Log("TimerSvc Init Done!");
-        timer = new PETimer(100);//表征100ms调用一次事件的计时器
+        timer = new PETimer(0);//表征100ms调用一次事件的计时器
         timer.SetLog(info => PECommon.Log(info));
         //设置Handle的逻辑体，即驱动函数在驱动至一个满足条件的回调时，不再执行回调，而是将回调加入队列当中
         timer.SetHandle((cb, tid) =>
@@ -43,7 +43,7 @@ class TimerSvc
 
     /// <summary>
     /// 这个函数在主函数的循环中驱动；
-    /// 注意：入队是通过PETimer自身的srvTimer异步驱动，而出对执行则仍然要依靠主函数循环驱动；
+    /// 注意：入队是通过PETimer自身的srvTimer异步驱动，而出队执行则仍然要依靠主函数循环驱动；
     /// Plane设计的思路是，既希望它异步驱动，但是不希望它异步的执行回调（因为异步存在资源争用的问题）
     /// </summary>
     public void Update()
@@ -72,7 +72,7 @@ class TimerSvc
     public long GetNowTime()
     {
         return (long)timer.GetMillisecondsTime();
-}
+    }
 }
 
 /// <summary>

@@ -55,6 +55,11 @@
             代表完成任务的数据，字符串格式：0|1|0，代表id|完成进度|未完成
             </summary>
         </member>
+        <member name="F:PlayerData.fuben">
+            <summary>
+            代表当前副本的关卡
+            </summary>
+        </member>
         <member name="T:ReqLogin">
             <summary>
             请求登录数据
@@ -156,6 +161,16 @@
             推送体力恢复数据
             </summary>
         </member>
+        <member name="T:ReqFBFight">
+            <summary>
+            请求副本战斗类型
+            </summary>
+        </member>
+        <member name="T:RspFBFight">
+            <summary>
+            响应请求副本战斗类型
+            </summary>
+        </member>
         <member name="T:ReqTakeTaskReward">
             <summary>
             请求任务完成数据
@@ -164,6 +179,11 @@
         <member name="T:RspTakeTaskReward">
             <summary>
             响应任务完成数据
+            </summary>
+        </member>
+        <member name="T:PshTaskPrgs">
+            <summary>
+            推送任务进度数据
             </summary>
         </member>
         <member name="T:ErrorCode">
@@ -307,6 +327,21 @@
             响应完成任务类型
             </summary>
         </member>
+        <member name="F:CMD.PshTaskPrgs">
+            <summary>
+            推送进度任务类型
+            </summary>
+        </member>
+        <member name="F:CMD.ReqFBFight">
+            <summary>
+            请求副本战斗类型
+            </summary>
+        </member>
+        <member name="F:CMD.RspFBFight">
+            <summary>
+            响应副本战斗类型
+            </summary>
+        </member>
         <member name="T:SrvCfg">
             <summary>
             服务器配置
@@ -346,6 +381,13 @@
             </summary>
             <param name="lv">等级</param>
             <returns></returns>
+        </member>
+        <member name="M:PECommon.CaculExp(PlayerData,System.Int32)">
+            <summary>
+            计算玩家经验引起的等级和经验变化
+            </summary>
+            <param name="pd">玩家数据</param>
+            <param name="addExp">增加的经验</param>
         </member>
         <member name="F:PECommon.PowerAddMinute">
             <summary>

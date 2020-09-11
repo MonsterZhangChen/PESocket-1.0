@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：PowerSys.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/24 18:18   	
 	功能：体力恢复系统
@@ -24,7 +24,7 @@ public class PowerSys
     {
         timerSvc = TimerSvc.Instance;
         cacheSvc = CacheSvc.Instance;
-        timerSvc.AddTimeTask(CalcPowerAdd, PECommon.PowerAddMinute, PETimeUnit.Minute, 0);
+        timerSvc.AddTimeTask(CalcPowerAdd, PECommon.PowerAddMinute, PETimeUnit.Second, 0);
         PECommon.Log("PowerSys Init Done");
     }
 

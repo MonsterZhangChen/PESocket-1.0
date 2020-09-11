@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：NetSvc.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/01 14:33   	
 	功能：网络服务
@@ -115,6 +115,9 @@ public class NetSvc
                 break;
             case CMD.ReqTakeTaskReward:
                 TaskSys.Instance.ReqTakeTaskReward(pack);
+                break;
+            case CMD.ReqFBFight:
+                FubenSys.Instance.ReqFBFight(pack);
                 break;
             default:
                 break;

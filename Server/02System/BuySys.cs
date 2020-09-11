@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：BuySys.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/17 17:30   	
 	功能：交易购买业务
@@ -42,17 +42,25 @@ public class BuySys
         else
         {
             pd.diamond -= data.cost;
+            PshTaskPrgs pshTaskPrgs = null;
             switch (data.type)
             {
                 case 0:
                     pd.power += 100;
+                    //任务进度更新
+                    //TaskSys.Instance.CalcTaskPrgs(pd, 4);并包优化(rspBuy&&PshTaskPrgs合并)
+                    pshTaskPrgs = TaskSys.Instance.GetTaskPrgs(pd, 4);
                     break;
                 case 1:
                     pd.coin += 1000;
+                    //任务进度更新
+                    //TaskSys.Instance.CalcTaskPrgs(pd, 5);并包优化
+                    pshTaskPrgs = TaskSys.Instance.GetTaskPrgs(pd, 5);
                     break;
             }
             if (cacheSvc.UpdatePlayerData(pd.id, pd))
             {
+                msg.pshTaskPrgs = pshTaskPrgs;
                 msg.RspBuy = new RspBuy
                 {
                     type = data.type,

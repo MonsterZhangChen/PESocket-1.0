@@ -32,9 +32,7 @@ namespace PENet {
             try {
                 this.skt = skt;
                 this.closeCB = closeCB;
-
                 OnConnected();
-
                 PEPkg pack = new PEPkg();
                 //开始接收一个数据头
                 skt.BeginReceive(

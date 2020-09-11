@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：DBMgr.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/02 15:50   	
 	功能：数据库管理类
@@ -79,6 +79,7 @@ public class DBMgr
                             strongArr = ParseStrongStr(reader.GetString("strong")),
                             time = reader.GetInt64("time"),
                             taskStrArr = ParseTaskStr(reader.GetString("task")),
+                            fuben = reader.GetInt32("fuben")
                         };
                     };
                 }
@@ -113,7 +114,8 @@ public class DBMgr
                     critical = 2,
                     guideid = 1001,
                     strongArr = new int[6],
-                    taskStrArr= new string[]{"1#0#0", "2#0#0","3#0#0","4#0#0","5#0#0","6#0#0" },
+                    taskStrArr = new string[] { "1#0#0", "2#0#0", "3#0#0", "4#0#0", "5#0#0", "6#0#0" },
+                    fuben = 10001,
                 time = TimerSvc.Instance.GetNowTime(),
                     //to add
                 };
@@ -200,7 +202,7 @@ public class DBMgr
                 ("insert into account set acct=@acct,pass=@pass,name=@name,level=@level," +
                 "exp=@exp,power=@power,coin=@coin,diamond=@diamond,crystal=@crystal,hp=@hp,ad=@ad,ap=@ap," +
                 "addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical," +
-                "guideid=@guideid,strong=@strong,time=@time,task=@task", conn);
+                "guideid=@guideid,strong=@strong,time=@time,task=@task,fuben=@fuben", conn);
             cmd.Parameters.AddWithValue("acct", acct);
             cmd.Parameters.AddWithValue("pass", pass);
             cmd.Parameters.AddWithValue("name", pd.name);
@@ -221,7 +223,8 @@ public class DBMgr
             cmd.Parameters.AddWithValue("guideid", pd.guideid);
             cmd.Parameters.AddWithValue("strong", BulidStrongStr(pd.strongArr));
             cmd.Parameters.AddWithValue("time", pd.time);
-            cmd.Parameters.AddWithValue("task", pd.taskStrArr);
+            cmd.Parameters.AddWithValue("task", BulidTaskStr(pd.taskStrArr));
+            cmd.Parameters.AddWithValue("fuben", pd.fuben);
             //to add
             cmd.ExecuteNonQuery();
             id = (int)cmd.LastInsertedId;
@@ -276,7 +279,7 @@ public class DBMgr
         {
             //关于charset:字符编码，用Navicat时得加上不然会乱码
             MySqlCommand cmd = new MySqlCommand("update account set name=@name,level=@level,exp=@exp,power=@power,coin=@coin,diamond=@diamond,crystal=@crystal," +
-                "hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,guideid=@guideid,strong=@strong,time=@time,task=@task where id=@id"
+                "hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,guideid=@guideid,strong=@strong,time=@time,task=@task,fuben=@fuben where id=@id"
                 , conn);
             cmd.Parameters.AddWithValue("id", playerData.id);
             cmd.Parameters.AddWithValue("name", playerData.name);
@@ -298,6 +301,7 @@ public class DBMgr
             cmd.Parameters.AddWithValue("strong", BulidStrongStr(playerData.strongArr));
             cmd.Parameters.AddWithValue("time", playerData.time);
             cmd.Parameters.AddWithValue("task", BulidTaskStr(playerData.taskStrArr));
+            cmd.Parameters.AddWithValue("fuben", playerData.fuben);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             isUpdate = true;

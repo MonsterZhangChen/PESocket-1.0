@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：PECommon.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/01 16:14   	
 	功能：服务端和客户端的公共工具类
@@ -99,7 +99,7 @@ public class PECommon
     /// <summary>
     /// 体力恢复的间隔时间(单位：分钟，测试单位为秒钟)
     /// </summary>
-    public const int PowerAddMinute = 5;
+    public const int PowerAddMinute = 30;
     /// <summary>
     /// 体力恢复的数量
     /// </summary>

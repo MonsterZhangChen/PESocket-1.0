@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：CfgSvc.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/09 17:22   	
 	功能：配置文件读取服务
@@ -32,6 +32,7 @@ class CfgSvc
         InitGuideTaskCfg(@"E:\U3dProject\DarkGod\Assets\Resources\ResCfgs\guide.xml");
         InitStrongCfg(@"E:\U3dProject\DarkGod\Assets\Resources\ResCfgs\strong.xml");
         InitTaskRewrdCfg(@"E:\U3dProject\DarkGod\Assets\Resources\ResCfgs\taskreward.xml");
+        InitMapCfg(@"E:\U3dProject\DarkGod\Assets\Resources\ResCfgs\map.xml");
     }
 
     #region 任务引导信息配置
@@ -224,6 +225,53 @@ class CfgSvc
     }
     #endregion
 
+    #region 地图配置
+    private Dictionary<int, MapCfg> mapDic = new Dictionary<int, MapCfg>();
+    private void InitMapCfg(string path)
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.Load(path);
+
+        XmlNodeList nodLst = doc.SelectSingleNode("root").ChildNodes;
+
+        for (int i = 0; i < nodLst.Count; i++)
+        {
+            XmlElement ele = nodLst[i] as XmlElement;
+
+            if (ele.GetAttributeNode("ID") == null)
+            {
+                continue;
+            }
+            int ID = Convert.ToInt32(ele.GetAttributeNode("ID").InnerText);
+            MapCfg mc = new MapCfg
+            {
+                ID = ID
+            };
+
+            foreach (XmlElement e in nodLst[i].ChildNodes)
+            {
+                switch (e.Name)
+                {
+                    case "power":
+                        mc.power = int.Parse(e.InnerText);
+                        break;
+                }
+            }
+            mapDic.Add(ID, mc);
+        }
+        PECommon.Log("MapCfg Init Done.");
+
+    }
+    public MapCfg GetMapCfg(int id)
+    {
+        MapCfg mc = null;
+        if (mapDic.TryGetValue(id, out mc))
+        {
+            return mc;
+        }
+        return null;
+    }
+    #endregion
 
 }
 
@@ -296,6 +344,15 @@ public class TaskRewardData : BaseData<TaskRewardData>
 {
     public int prgs;
     public bool taked;
+}
+
+/// <summary>
+/// 地图配置数据
+/// </summary>
+public class MapCfg
+{
+    public int ID;
+    public int power;
 }
 
 /// <summary>

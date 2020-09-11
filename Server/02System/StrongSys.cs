@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：StrongSys.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/16 17:08   	
 	功能：强化升级系统
@@ -55,7 +55,7 @@ public class StrongSys
             msg.err = (int)ErrorCode.LackCrystal;
         }
         else//校验通过
-        {
+        {            
             //资产变化
             pd.coin -= nextSd.coin;
             pd.crystal -= nextSd.crystal;
@@ -66,8 +66,10 @@ public class StrongSys
             pd.ap += nextSd.addhurt;
             pd.addef += nextSd.adddef;
             pd.apdef += nextSd.adddef;
+            //任务进度更新
+            TaskSys.Instance.CalcTaskPrgs(pd, 3);
             //数据库更新
-            if(cacheSvc.UpdatePlayerData(pd.id, pd))
+            if (cacheSvc.UpdatePlayerData(pd.id, pd))
             {
                 msg.rspStrong = new RspStrong
                 {

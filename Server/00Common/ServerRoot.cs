@@ -1,6 +1,6 @@
 ﻿/****************************************************
 	文件：ServerRoot.cs
-	作者：章校长
+	作者：章晨
 	邮箱: 1728722243@qq.com
 	日期：2019/11/01 14:20   	
 	功能：服务器初始化
@@ -34,7 +34,8 @@ public class ServerRoot
         ChatSys.Instance.Init();
         BuySys.Instance.Init();
         PowerSys.Instance.Init();
-
+        TaskSys.Instance.Init();
+        FubenSys.Instance.Init();
     }
 
     /// <summary>
